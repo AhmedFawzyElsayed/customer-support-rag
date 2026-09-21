@@ -550,3 +550,8 @@ jupyter notebook notebooks/rag_pipeline.ipynb   # Kernel -> Restart & Run All
 cd backend && cp .env.example .env && uvicorn app.main:app --reload &
 cd ../frontend && cp .env.example .env && streamlit run app.py
 ```
+
+## 15. Teams
+
+- Ahmed Fawzy Elsayed Elsayed
+- Hatem Fawzy Elsayed Elsayed
