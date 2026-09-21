@@ -6,11 +6,12 @@ recent conversation history), build a grounding prompt, call the local Ollama
 LLM, and return the generated answer. Also offers a best-effort helper that
 asks the LLM for a few natural follow-up questions after a real answer.
 
-No artificial response-length cap is applied: some local models (including
-"thinking" models like qwen3.5) use part of their response on internal
-reasoning before writing the visible answer, and a tight cap can cut them
-off before they ever write anything visible. Letting the model run to
-completion is slower but far more reliable.
+think=False is passed on every call: qwen3.5 (and similar "reasoning" models)
+otherwise spend part of their response generating an internal, invisible
+chain-of-thought before writing the visible answer. Disabling this via
+Ollama's official "think" setting skips that step entirely, producing the
+same final answer dramatically faster and without any risk of the model
+running out of room mid-thought (the empty-response bug from earlier).
 """
 from __future__ import annotations
 
@@ -108,6 +109,7 @@ def _call_ollama(prompt: str) -> str:
     response = client.chat(
         model=settings.OLLAMA_MODEL,
         messages=[{"role": "user", "content": prompt}],
+        think=False,
     )
     return response.get("message", {}).get("content", "").strip()
 
